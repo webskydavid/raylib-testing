@@ -1,5 +1,5 @@
 Testing:
-    ☐ Prepare github project @started(24-10-03 19:57)
+    ✔ Prepare github project @started(24-10-03 19:57) @done(24-10-03 19:59) @lasted(2m7s)
     ☐ State management
     ☐ Debugging GUI
     ☐ Spliting into multiple files
