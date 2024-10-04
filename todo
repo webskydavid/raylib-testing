@@ -1,8 +1,18 @@
 Testing:
     ✔ Prepare github project @started(24-10-03 19:57) @done(24-10-03 19:59) @lasted(2m7s)
-    ☐ State management
-    ☐ Debugging GUI
-    ☐ Spliting into multiple files
-    ☐ Camera2D
-    ☐ YSort algorithm
-    ☐ GUI
+    ✘ State management @started(24-10-03 20:12) @cancelled(24-10-03 22:10) @wasted(1h58m17s)
+    
+Asteroid game:
+    ✔ Player ship with movement @done(24-10-04 17:07)
+    ☐ Add asteroid (generate random astroids) @started(24-10-04 17:09)
+    ☐ Collision detection with object
+    ☐ Drop collectable when asteroid is destroyed
+    ☐ Collect object if collided
+        Add few objects to the scene
+    ☐ Add score if asteroid is destroyed
+        Store game stats in a struct as a global variable
+    ☐ Minimap with additional screen
+
+    Bugs:
+
+        
