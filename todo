@@ -4,7 +4,8 @@ Testing:
     
 Asteroid game:
     ✔ Player ship with movement @done(24-10-04 17:07)
-    ☐ Add asteroid (generate random astroids) @started(24-10-04 17:09)
+    ✔ Add asteroid (generate random astroids) @started(24-10-04 17:09) @done(24-10-04 18:20) @lasted(1h11m13s)
+    ☐ Generate asteroids outside of the screen and move
     ☐ Collision detection with object
     ☐ Drop collectable when asteroid is destroyed
     ☐ Collect object if collided

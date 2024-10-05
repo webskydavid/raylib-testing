@@ -9,8 +9,10 @@
 #define Vector2Init(a, b) \
     (Vector2) { a, b }
 
-#define TAU PI * 2
 #define ROTATION_SPEED 1.0f
+
+const float TAU = (PI * 2.0f);
+const float SHIP_SPEED = 220.0f;
 
 bool isDebug = true;
 Vector2 shipPosition = {};
@@ -35,7 +37,25 @@ typedef enum {
     ASTEROID_LARGE
 } AsteroidType;
 
-void DrawAsteroid(Vector2 position, AsteroidType type, int seed) {
+float sizes[3] = {30.0f, 50.0f, 100.0f};
+
+void DrawAsteroid(Vector2 position, AsteroidType size, int seed) {
+    srand(seed);
+
+    int point_amount = 4 + rand() % 12;
+    Vector2 *points = MemAlloc(point_amount * sizeof(Vector2));
+    float step = TAU / (float)point_amount;
+
+    for (size_t i = 0; i < point_amount; i++) {
+        float radius = 30.0f + rand() % 50;
+        float angle = step * (float)i;
+
+        points[i] = Vector2Add(position, Vector2Scale(Vector2DirFromRotation(angle), radius));
+    }
+
+    for (size_t i = 0; i < point_amount; i++) {
+        DrawLineEx(points[i], points[(i + 1) % point_amount], 1, WHITE);
+    }
 }
 
 void DrawShip(Vector2 origin, float scale, float rotation) {
@@ -69,7 +89,7 @@ void Update() {
     shipDirection = Vector2DirFromRotation(rotation);
 
     if (IsKeyDown(KEY_W)) {
-        shipVelocity = Vector2Add(shipVelocity, Vector2Scale(shipDirection, 100 * GetFrameTime()));
+        shipVelocity = Vector2Add(shipVelocity, Vector2Scale(shipDirection, SHIP_SPEED * GetFrameTime()));
     }
 
     // This will scale the velocity by the drag factor
@@ -84,17 +104,7 @@ void Update() {
     shipPosition.y = fmodf(shipPosition.y + GetScreenHeight(), GetScreenHeight());
 }
 
-void Draw() {
-    BeginDrawing();
-    ClearBackground(BLACK);
-
-    Vector2 origin = Vector2Init(GetScreenWidth() / 2.0f, GetScreenHeight() / 2.0f);
-
-    DrawShip(shipPosition, 60.0f, shipRotation);
-
-    DrawAsteroid(shipPosition, ASTEROID_MEDIUM, 0);
-
-    // Debug
+void Debug() {
     if (isDebug) {
         DrawText(TextFormat("%f", shipRotation), 30, 10, 12, YELLOW);
         DrawText(TextFormat("%f , %f", shipPosition.x, shipPosition.y), 30, 30, 12, YELLOW);
@@ -106,7 +116,19 @@ void Draw() {
         Vector2 dir = Vector2Scale(shipDirection, 100.0f);
         DrawLineEx(shipPosition, Vector2Add(dir, shipPosition), 2, GREEN);
     }
+}
 
+void Draw() {
+    BeginDrawing();
+    ClearBackground(BLACK);
+
+    Vector2 origin = Vector2Init(GetScreenWidth() / 2.0f, GetScreenHeight() / 2.0f);
+
+    DrawShip(shipPosition, 60.0f, shipRotation);
+    DrawAsteroid(Vector2Init(300, 300), ASTEROID_MEDIUM, 2975);
+    DrawAsteroid(Vector2Init(100, 200), ASTEROID_MEDIUM, 2175);
+
+    Debug();
     EndDrawing();
 }
 
