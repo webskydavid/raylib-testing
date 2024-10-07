@@ -3,7 +3,6 @@
 
 #include "raylib.h"
 #include "raymath.h"
-#include "resource_dir.h"  // utility header for SearchAndSetResourceDir
 #include "state.h"
 
 #define Vector2Init(a, b) \
@@ -11,14 +10,35 @@
 
 #define ROTATION_SPEED 1.0f
 
+typedef enum {
+    ASTEROID_SMALL = 3,
+    ASTEROID_MEDIUM = 2,
+    ASTEROID_LARGE = 1
+} AsteroidType;
+
+float sizes[3] = {25.0f, 40.0f, 50.0f};
+
+typedef struct Asteroid {
+    Vector2 position;
+    Vector2 velocity;
+    float rotation;
+    float size;
+    int seed;
+    bool isDead;
+} Asteroid;
+
+const float SCALE = 25.0f;
 const float TAU = (PI * 2.0f);
-const float SHIP_SPEED = 220.0f;
+const float SHIP_SPEED = 300.0f;
 
 bool isDebug = true;
 Vector2 shipPosition = {};
 Vector2 shipVelocity = {};
 Vector2 shipDirection = {};
 float shipRotation = 0.0f;
+
+const int asteroidAmount = 20;
+Asteroid asteroids[asteroidAmount] = {};
 
 Vector2 Vector2Direction(Vector2 from, Vector2 to) {
     Vector2 direction = Vector2Subtract(to, from);
@@ -31,18 +51,24 @@ Vector2 Vector2DirFromRotation(float rotation) {
     return direction;
 }
 
-typedef enum {
-    ASTEROID_SMALL,
-    ASTEROID_MEDIUM,
-    ASTEROID_LARGE
-} AsteroidType;
+void DrawLines(Vector2 origin, Vector2 *points, int point_size, float scale, float rotation) {
+    for (size_t i = 0; i < point_size; i++) {
+        printf("%f, %f\n", points[i].x, points[i].y);
+        Vector2 rotated1 = Vector2Rotate(points[i], rotation);
+        Vector2 scaled1 = Vector2Scale(rotated1, scale);
+        Vector2 added1 = Vector2Add(scaled1, origin);
 
-float sizes[3] = {30.0f, 50.0f, 100.0f};
+        Vector2 rotated2 = Vector2Rotate(points[(i + 1) % 5], rotation);
+        Vector2 scaled2 = Vector2Scale(rotated2, scale);
+        Vector2 added2 = Vector2Add(scaled2, origin);
+        DrawLineEx(added1, added2, 1, WHITE);
+    }
+}
 
-void DrawAsteroid(Vector2 position, AsteroidType size, int seed) {
+void DrawAsteroid(Vector2 position, float size, int seed) {
     srand(seed);
 
-    int point_amount = 4 + rand() % 12;
+    int point_amount = 5 + rand() % 16;
     Vector2 *points = MemAlloc(point_amount * sizeof(Vector2));
     float step = TAU / (float)point_amount;
 
@@ -54,23 +80,18 @@ void DrawAsteroid(Vector2 position, AsteroidType size, int seed) {
     }
 
     for (size_t i = 0; i < point_amount; i++) {
-        DrawLineEx(points[i], points[(i + 1) % point_amount], 1, WHITE);
+        Vector2 scaled1 = Vector2Scale(points[i], size);
+        Vector2 added1 = Vector2Add(scaled1, position);
+        Vector2 scaled2 = Vector2Scale(points[(i + 1) % point_amount], size);
+        Vector2 added2 = Vector2Add(scaled2, position);
+        DrawLineEx(added1, added2, 1, WHITE);
     }
 }
 
 void DrawShip(Vector2 origin, float scale, float rotation) {
-    Vector2 lines[5] = {{-0.4, -0.5}, {0.0, 0.5}, {0.4, -0.5}, {0.3, -0.4}, {-0.3, -0.4}};
-    for (size_t i = 0; i < 5; i++) {
-        Vector2 rotated1 = Vector2Rotate(lines[i], rotation);
-        Vector2 scaled1 = Vector2Scale(rotated1, scale);
-        Vector2 added1 = Vector2Add(scaled1, origin);
-
-        Vector2 rotated2 = Vector2Rotate(lines[(i + 1) % 5], rotation);
-        Vector2 scaled2 = Vector2Scale(rotated2, scale);
-        Vector2 added2 = Vector2Add(scaled2, origin);
-
-        DrawLineEx(added1, added2, 1, WHITE);
-    }
+    const int point_amount = 5;
+    Vector2 pts[point_amount] = {{-0.4, -0.5}, {0.0, 0.5}, {0.4, -0.5}, {0.3, -0.4}, {-0.3, -0.4}};
+    DrawLines(origin, pts, point_amount, scale, rotation);
 }
 
 void Update() {
@@ -102,6 +123,14 @@ void Update() {
 
     shipPosition.x = fmodf(shipPosition.x + GetScreenWidth(), GetScreenWidth());
     shipPosition.y = fmodf(shipPosition.y + GetScreenHeight(), GetScreenHeight());
+
+    for (size_t i = 0; i < asteroidAmount; i++) {
+        Vector2 newPos = Vector2Add(asteroids[i].position, Vector2Scale(asteroids[i].velocity, GetFrameTime()));
+        asteroids[i].position.x = fmodf(asteroids[i].position.x + GetScreenWidth(), GetScreenWidth());
+        asteroids[i].position.y = fmodf(asteroids[i].position.y + GetScreenHeight(), GetScreenHeight());
+
+        asteroids[i].position = Vector2Add(asteroids[i].position, Vector2Scale(asteroids[i].velocity, GetFrameTime()));
+    }
 }
 
 void Debug() {
@@ -124,9 +153,12 @@ void Draw() {
 
     Vector2 origin = Vector2Init(GetScreenWidth() / 2.0f, GetScreenHeight() / 2.0f);
 
-    DrawShip(shipPosition, 60.0f, shipRotation);
-    DrawAsteroid(Vector2Init(300, 300), ASTEROID_MEDIUM, 2975);
-    DrawAsteroid(Vector2Init(100, 200), ASTEROID_MEDIUM, 2175);
+    DrawShip(shipPosition, SCALE, shipRotation);
+
+    for (size_t i = 0; i < asteroidAmount; i++) {
+        DrawAsteroid(asteroids[i].position, asteroids[i].size, asteroids[i].seed);
+    }
+
     Debug();
     EndDrawing();
 }
@@ -134,9 +166,22 @@ void Draw() {
 int main() {
     SetTargetFPS(60);
     SetConfigFlags(FLAG_VSYNC_HINT | FLAG_WINDOW_HIGHDPI);
-    InitWindow(700, 700, "Hello Raylib");
+    InitWindow(700, 700, "raylib");
 
     shipPosition = Vector2Init(GetScreenWidth() / 2.0f, GetScreenHeight() / 2.0f);
+
+    for (size_t i = 0; i < asteroidAmount; i++) {
+        Vector2 rand_pos = Vector2Init(rand() % GetScreenWidth(), rand() % GetScreenHeight());
+        float rot = rand() % 360 / DEG2RAD;
+        Vector2 dir = Vector2DirFromRotation(rot);
+        asteroids[i] = (Asteroid){
+            .position = rand_pos,
+            .velocity = Vector2Scale(dir, (rand() % 60)),
+            .rotation = rot,
+            .size = sizes[rand() % 3] / 100.0f,
+            .seed = rand() % 1000000,
+        };
+    }
 
     while (!WindowShouldClose()) {
         Update();
