@@ -127,7 +127,6 @@ void Draw() {
     DrawShip(shipPosition, 60.0f, shipRotation);
     DrawAsteroid(Vector2Init(300, 300), ASTEROID_MEDIUM, 2975);
     DrawAsteroid(Vector2Init(100, 200), ASTEROID_MEDIUM, 2175);
-
     Debug();
     EndDrawing();
 }

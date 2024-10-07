@@ -12,6 +12,8 @@
     "raylib.h": "c",
     "resource_dir.h": "c",
     "state.h": "c",
-    "raymath.h": "c"
-  }
+    "raymath.h": "c",
+    "utils.h": "c"
+  },
+  "C_Cpp.default.compilerPath": "/usr/bin/clang"
 }
