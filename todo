@@ -5,8 +5,11 @@ Testing:
 Asteroid game:
     ✔ Player ship with movement @done(24-10-04 17:07)
     ✔ Add asteroid (generate random astroids) @started(24-10-04 17:09) @done(24-10-04 18:20) @lasted(1h11m13s)
-    ☐ Generate asteroids outside of the screen and move
-    ☐ Collision detection with object
+    ✔ Generate asteroids outside of the screen and move @done(24-10-08 13:49)
+    ✔ Collision detection with object @started(24-10-08 13:50) @done(24-10-08 19:00) @lasted(5h10m58s)
+        Collision based on the size of the ship and asteroids circle collision
+    ☐ Split into multiple files @started(24-10-08 19:01)
+    ☐ Basic shooting and projectile
     ☐ Drop collectable when asteroid is destroyed
     ☐ Collect object if collided
         Add few objects to the scene
