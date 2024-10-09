@@ -33,7 +33,6 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(box2d)
 
 
-message("PROJECT_SOURCE_DIR " ${PROJECT_SOURCE_DIR})
 
 ###########################
 # Setup
@@ -44,14 +43,13 @@ set(CMAKE_PROJECT_INCLUDE "${PROJECT_SOURCE_DIR}/src")
 set(PROJECT_INCLUDE "${PROJECT_SOURCE_DIR}/src")
 
 message("SRC " ${SRC_FILES})
-message("PROJECT_INCLUDE " ${PROJECT_INCLUDE})
-message("PROJECT_NAME " ${PROJECT_NAME})
 
 # Executable
 add_executable(game 
 	"${CMAKE_PROJECT_INCLUDE}/main.c"
 	"${CMAKE_PROJECT_INCLUDE}/libs/asteroid.c"
 	"${CMAKE_PROJECT_INCLUDE}/libs/ship.c"
+	"${CMAKE_PROJECT_INCLUDE}/libs/debug.c"
 )
 
 target_sources(${PROJECT_NAME} PRIVATE ${SRC_FILES})
