@@ -7,6 +7,7 @@ project(game
 	LANGUAGES C
 )
 
+
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
 FetchContent_Declare(
@@ -32,11 +33,41 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(box2d)
 
 
+message("PROJECT_SOURCE_DIR " ${PROJECT_SOURCE_DIR})
 
-add_executable(game src/main.c)
-target_link_libraries(game PUBLIC box2d raylib)
+###########################
+# Setup
+###########################
 
-if (MSVC)
-	set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT game)
-	set_property(TARGET game PROPERTY VS_DEBUGGER_WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}")
-endif()	
+file(GLOB_RECURSE SRC_FILES ${PROJECT_SOURCE_DIR}/src/*.c)
+set(CMAKE_PROJECT_INCLUDE "${PROJECT_SOURCE_DIR}/src")
+set(PROJECT_INCLUDE "${PROJECT_SOURCE_DIR}/src")
+
+message("SRC " ${SRC_FILES})
+message("PROJECT_INCLUDE " ${PROJECT_INCLUDE})
+message("PROJECT_NAME " ${PROJECT_NAME})
+
+# Executable
+add_executable(game 
+	"${CMAKE_PROJECT_INCLUDE}/main.c"
+	"${CMAKE_PROJECT_INCLUDE}/libs/asteroid.c"
+	"${CMAKE_PROJECT_INCLUDE}/libs/ship.c"
+)
+
+target_sources(${PROJECT_NAME} PRIVATE ${SRC_FILES})
+target_include_directories(${PROJECT_NAME} PRIVATE ${PROJECT_INCLUDE})
+
+target_link_libraries(${PROJECT_NAME} PRIVATE raylib)
+target_link_libraries(${PROJECT_NAME} PRIVATE box2d)
+
+###########################
+# Build
+###########################
+
+
+
+if(CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
+  set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /ZI")
+  set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} /SAFESEH:NO")
+  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /SAFESEH:NO")
+endif()

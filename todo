@@ -8,7 +8,7 @@ Asteroid game:
     ✔ Generate asteroids outside of the screen and move @done(24-10-08 13:49)
     ✔ Collision detection with object @started(24-10-08 13:50) @done(24-10-08 19:00) @lasted(5h10m58s)
         Collision based on the size of the ship and asteroids circle collision
-    ☐ Split into multiple files @started(24-10-08 19:01)
+    ✔ Split into multiple files @started(24-10-08 21:25) @done(24-10-09 16:19) @lasted(18h54m9s)
     ☐ Basic shooting and projectile
     ☐ Drop collectable when asteroid is destroyed
     ☐ Collect object if collided
