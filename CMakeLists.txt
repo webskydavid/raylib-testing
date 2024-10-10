@@ -37,7 +37,7 @@ FetchContent_MakeAvailable(box2d)
 ###########################
 # Setup
 ###########################
-
+file(GLOB_RECURSE SRC_FILES ${PROJECT_SOURCE_DIR}/src/*.c)
 set(CMAKE_PROJECT_INCLUDE "${PROJECT_SOURCE_DIR}/src")
 set(PROJECT_INCLUDE "${PROJECT_SOURCE_DIR}/src")
 
