@@ -14,12 +14,28 @@ void InitDebug() {
 }
 
 void ProjectilesDebug() {
+    DrawText(TextFormat("Projectiles"), 30, 130, 14, WHITE);
     for (size_t i = 0; i < PROJECTILE_AMOUNT; i++) {
         bool visible = projectiles[i].visible;
         char visibleText[4];
         strcpy(visibleText, visible ? "Yes" : "No");
-        int posY = 130 + (i * 20);
+        int posY = 150 + (i * 20);
         DrawText(TextFormat("%s ", visibleText), 30, posY, 14, WHITE);
+    }
+}
+
+void AsteroidsDebug() {
+    DrawText(TextFormat("Asteroids"), 120, 130, 14, WHITE);
+    for (size_t i = 0; i < asteroidAmount; i++) {
+        bool isDead = asteroids[i].isDead;
+        char visibleText[4];
+        strcpy(visibleText, isDead ? "Yes" : "No");
+        int posY = 150 + (i * 20);
+        float x = asteroids[i].position.x;
+        float y = asteroids[i].position.y;
+        DrawText(TextFormat("A: %s ", visibleText), 120, posY, 14, WHITE);
+        DrawText(TextFormat("%i", i), x, y, 14, WHITE);
+        DrawText(TextFormat("%f x %f", x, y), x, y + 20, 14, WHITE);
     }
 }
 
@@ -48,5 +64,7 @@ void DrawDebug() {
         }
 
         ProjectilesDebug();
+
+        AsteroidsDebug();
     }
 }
