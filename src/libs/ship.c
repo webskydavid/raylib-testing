@@ -66,12 +66,25 @@ void InitShip() {
 void ShootShip() {
     shootRate += 5;
     for (size_t i = 0; i < PROJECTILE_AMOUNT; i++) {
-        if (shootRate % 40 == 0 && !projectiles[i].visible) {
+        if (shootRate % 15 == 0 && !projectiles[i].visible) {
             projectiles[i].position = ship.position;
             projectiles[i].direction = ship.direction;
             projectiles[i].velocity = Vector2Scale(ship.direction, 430.0f);
             projectiles[i].visible = true;
+
+            // Will break adding new projectiles to the array when the shootRate is reached
             break;
+        }
+    }
+}
+
+void CheckCollisionWithAsteroids(Projectile projectile) {
+    for (size_t j = 0; j < asteroidAmount; j++) {
+        if (!asteroids[j].isDead) {
+            if (CheckCollisionCircles(projectile.position, PROJECTILE_SIZE, asteroids[j].position, asteroids[j].size / 2)) {
+                projectile.visible = false;
+                asteroids[j].isDead = true;
+            }
         }
     }
 }
@@ -82,14 +95,7 @@ void UpdateProjectiles() {
             projectiles[i].direction = ship.direction;
             projectiles[i].position = Vector2Add(projectiles[i].position, Vector2Scale(projectiles[i].velocity, GetFrameTime()));
 
-            for (size_t j = 0; j < asteroidAmount; j++) {
-                if (!asteroids[j].isDead) {
-                    if (CheckCollisionCircles(projectiles[i].position, PROJECTILE_SIZE, asteroids[j].position, asteroids[j].size / 2)) {
-                        projectiles[i].visible = false;
-                        asteroids[j].isDead = true;
-                    }
-                }
-            }
+            CheckCollisionWithAsteroids(projectiles[i]);
 
             if (projectiles[i].position.x > GetScreenWidth() ||
                 projectiles[i].position.y > GetScreenHeight() ||
