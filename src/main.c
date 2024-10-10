@@ -31,6 +31,7 @@ void Update() {
 
     UpdateShip();
     UpdateAsteroid();
+    UpdateProjectiles();
 }
 
 void Draw() {
@@ -40,6 +41,7 @@ void Draw() {
     DrawDebug();
     DrawShip(ship.position, SCALE, ship.rotation);
     DrawAsteroids();
+    DrawProjectiles();
 
     EndDrawing();
 }

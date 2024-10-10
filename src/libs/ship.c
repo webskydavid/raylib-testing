@@ -2,15 +2,21 @@
 
 #include <raylib.h>
 #include <raymath.h>
+#include <stdio.h>
 #include <stdlib.h>
 
 #include "./../constants.h"
 
+Projectile *projectiles;
 Ship ship;
 
+const int PROJECTILE_AMOUNT = 20;
 const float SCALE = 25.0f;
 const float SHIP_SPEED = 300.0f;
 const float ROTATION_SPEED = 3.0f;
+
+int shootRate = 0;
+
 void DrawLines(Vector2 origin, Vector2 *points, int point_size, float scale, float rotation) {
     for (size_t i = 0; i < point_size; i++) {
         Vector2 rotated1 = Vector2Rotate(points[i], rotation);
@@ -33,7 +39,9 @@ Vector2 Vector2DirFromRotation(float rotation) {
     Vector2 direction = {cosf(rotation), sinf(rotation)};
     return direction;
 }
+
 void InitShip() {
+    projectiles = MemAlloc(PROJECTILE_AMOUNT * sizeof(Projectile));
     ship = (Ship){
         .position = Vector2Init(GetScreenWidth() / 2.0f, GetScreenHeight() / 2.0f),
         .velocity = Vector2Init(0.0f, 0.0f),
@@ -42,7 +50,56 @@ void InitShip() {
         .scale = 1.0f,
         .isDead = false,
     };
+
+    for (size_t i = 0; i < PROJECTILE_AMOUNT; i++) {
+        projectiles[0] = (Projectile){
+            .position = ship.position,
+            .velocity = Vector2Scale(ship.direction, 30.0f),
+            .direction = ship.direction,
+            .visible = false,
+        };
+    }
 };
+
+void ShootShip() {
+    shootRate += 5;
+    for (size_t i = 0; i < PROJECTILE_AMOUNT; i++) {
+        if (shootRate % 10 == 0 && !projectiles[i].visible) {
+            projectiles[i].position = ship.position;
+            projectiles[i].direction = ship.direction;
+            projectiles[i].velocity = Vector2Scale(ship.direction, 430.0f);
+            projectiles[i].visible = true;
+            break;
+        }
+    }
+}
+
+void UpdateProjectiles() {
+    int i = 0;
+
+    for (size_t i = 0; i < PROJECTILE_AMOUNT; i++) {
+        if (projectiles[i].visible) {
+            projectiles[i].direction = ship.direction;
+            projectiles[i].position = Vector2Add(projectiles[i].position, Vector2Scale(projectiles[i].velocity, GetFrameTime()));
+
+            if (projectiles[i].position.x > GetScreenWidth() ||
+                projectiles[i].position.y > GetScreenHeight() ||
+                projectiles[i].position.x < 0 ||
+                projectiles[i].position.y < 0) {
+                projectiles[i].visible = false;
+                shootRate = 0;
+            }
+        }
+    }
+}
+
+void DrawProjectiles() {
+    for (size_t i = 0; i < PROJECTILE_AMOUNT; i++) {
+        if (projectiles[i].visible) {
+            DrawCircleV(projectiles[i].position, 5, RED);
+        }
+    }
+}
 
 void UpdateShip() {
     if (IsKeyDown(KEY_D)) {
@@ -58,6 +115,10 @@ void UpdateShip() {
 
     if (IsKeyDown(KEY_W)) {
         ship.velocity = Vector2Add(ship.velocity, Vector2Scale(ship.direction, SHIP_SPEED * GetFrameTime()));
+    }
+
+    if (IsKeyDown(KEY_SPACE)) {
+        ShootShip();
     }
 
     // This will scale the velocity by the drag factor
