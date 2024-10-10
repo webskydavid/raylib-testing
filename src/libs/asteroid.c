@@ -55,19 +55,23 @@ void InitAsteroid() {
 
 void UpdateAsteroid() {
     for (size_t i = 0; i < asteroidAmount; i++) {
-        Vector2 newPos = Vector2Add(asteroids[i].position, Vector2Scale(asteroids[i].velocity, GetFrameTime()));
-        asteroids[i].position.x = fmodf(asteroids[i].position.x + GetScreenWidth(), GetScreenWidth());
-        asteroids[i].position.y = fmodf(asteroids[i].position.y + GetScreenHeight(), GetScreenHeight());
+        if (!asteroids[i].isDead) {
+            Vector2 newPos = Vector2Add(asteroids[i].position, Vector2Scale(asteroids[i].velocity, GetFrameTime()));
+            asteroids[i].position.x = fmodf(asteroids[i].position.x + GetScreenWidth(), GetScreenWidth());
+            asteroids[i].position.y = fmodf(asteroids[i].position.y + GetScreenHeight(), GetScreenHeight());
+            asteroids[i].position = Vector2Add(asteroids[i].position, Vector2Scale(asteroids[i].velocity, GetFrameTime()));
 
-        asteroids[i].position = Vector2Add(asteroids[i].position, Vector2Scale(asteroids[i].velocity, GetFrameTime()));
-        isColliding = CheckCollisionCircles(ship.position, SCALE / 2, asteroids[i].position, asteroids[i].size / 2);
-        if (isColliding) {
-            ship.isDead = true;
+            if (CheckCollisionCircles(ship.position, SCALE / 2, asteroids[i].position, asteroids[i].size / 2)) {
+                ship.isDead = true;
+            }
         }
     }
 }
 void DrawAsteroid(Asteroid asteroid) {
     for (size_t i = 0; i < asteroid.points_amount; i++) {
+        if (asteroid.isDead) {
+            continue;
+        }
         Vector2 pos1 = Vector2Add(asteroid.position, asteroid.points[i]);
         Vector2 pos2 = Vector2Add(asteroid.position, asteroid.points[(i + 1) % asteroid.points_amount]);
         DrawLineEx(pos1, pos2, 2.0f, WHITE);

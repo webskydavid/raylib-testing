@@ -11,6 +11,7 @@ Asteroid game:
     ✔ Split into multiple files @started(24-10-08 21:25) @done(24-10-09 16:19) @lasted(18h54m9s)
     ✔ Basic shooting and projectile @started(24-10-09 17:16) @done(24-10-10 09:09) @lasted(15h53m51s)
     ✔ Projectile collision with asteroid @started(24-10-10 19:28) @done(24-10-10 21:23) @lasted(1h55m53s)
+    ✔ Ship collision with asteroids @done(24-10-10 21:28)
     ☐ Drop collectable when asteroid is destroyed
     ☐ Collect object if collided
         Add few objects to the scene
