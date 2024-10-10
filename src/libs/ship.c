@@ -6,11 +6,13 @@
 #include <stdlib.h>
 
 #include "./../constants.h"
+#include "asteroid.h"
 
 Projectile *projectiles;
 Ship ship;
 
-const int PROJECTILE_AMOUNT = 20;
+const int PROJECTILE_AMOUNT = 40;
+const float PROJECTILE_SIZE = 10.0f;
 const float SCALE = 25.0f;
 const float SHIP_SPEED = 300.0f;
 const float ROTATION_SPEED = 3.0f;
@@ -64,7 +66,7 @@ void InitShip() {
 void ShootShip() {
     shootRate += 5;
     for (size_t i = 0; i < PROJECTILE_AMOUNT; i++) {
-        if (shootRate % 10 == 0 && !projectiles[i].visible) {
+        if (shootRate % 40 == 0 && !projectiles[i].visible) {
             projectiles[i].position = ship.position;
             projectiles[i].direction = ship.direction;
             projectiles[i].velocity = Vector2Scale(ship.direction, 430.0f);
@@ -75,12 +77,19 @@ void ShootShip() {
 }
 
 void UpdateProjectiles() {
-    int i = 0;
-
     for (size_t i = 0; i < PROJECTILE_AMOUNT; i++) {
         if (projectiles[i].visible) {
             projectiles[i].direction = ship.direction;
             projectiles[i].position = Vector2Add(projectiles[i].position, Vector2Scale(projectiles[i].velocity, GetFrameTime()));
+
+            for (size_t j = 0; j < asteroidAmount; j++) {
+                if (!asteroids[j].isDead) {
+                    if (CheckCollisionCircles(projectiles[i].position, PROJECTILE_SIZE, asteroids[j].position, asteroids[j].size / 2)) {
+                        projectiles[i].visible = false;
+                        asteroids[j].isDead = true;
+                    }
+                }
+            }
 
             if (projectiles[i].position.x > GetScreenWidth() ||
                 projectiles[i].position.y > GetScreenHeight() ||
@@ -96,12 +105,14 @@ void UpdateProjectiles() {
 void DrawProjectiles() {
     for (size_t i = 0; i < PROJECTILE_AMOUNT; i++) {
         if (projectiles[i].visible) {
-            DrawCircleV(projectiles[i].position, 5, RED);
+            DrawCircleV(projectiles[i].position, PROJECTILE_SIZE, RED);
         }
     }
 }
 
 void UpdateShip() {
+    if (ship.isDead) return;
+
     if (IsKeyDown(KEY_D)) {
         ship.rotation += ROTATION_SPEED * TAU * GetFrameTime();
     }
@@ -134,6 +145,8 @@ void UpdateShip() {
 }
 
 void DrawShip(Vector2 origin, float scale, float rotation) {
+    if (ship.isDead) return;
+
     const int point_amount = 5;
     Vector2 pts[point_amount] = {{-0.4, -0.5}, {0.0, 0.5}, {0.4, -0.5}, {0.3, -0.4}, {-0.3, -0.4}};
     DrawLines(origin, pts, point_amount, scale, rotation);
