@@ -23,11 +23,6 @@ extern Projectile *projectiles;
 extern Ship ship;
 extern int shootRate;
 
-const int PROJECTILE_AMOUNT;
-const float SCALE;
-const float SHIP_SPEED;
-const float ROTATION_SPEED;
-
 Vector2 Vector2Direction(Vector2 from, Vector2 to);
 Vector2 Vector2DirFromRotation(float rotation);
 

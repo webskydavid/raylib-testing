@@ -26,7 +26,7 @@ void ProjectilesDebug() {
 
 void AsteroidsDebug() {
     DrawText(TextFormat("Asteroids"), 120, 130, 14, WHITE);
-    for (size_t i = 0; i < asteroidAmount; i++) {
+    for (size_t i = 0; i < ASTEROID_AMOUNT; i++) {
         bool isDead = asteroids[i].isDead;
         char visibleText[4];
         strcpy(visibleText, isDead ? "Yes" : "No");
@@ -59,7 +59,7 @@ void DrawDebug() {
 
         Asteroid* a = asteroids;
 
-        for (size_t i = 0; i < asteroidAmount; i++) {
+        for (size_t i = 0; i < ASTEROID_AMOUNT; i++) {
             DrawCircleLines(a[i].position.x, a[i].position.y, a[i].size / 2, ORANGE);
         }
 

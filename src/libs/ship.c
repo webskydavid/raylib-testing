@@ -11,12 +11,6 @@
 Projectile *projectiles;
 Ship ship;
 
-const int PROJECTILE_AMOUNT = 40;
-const float PROJECTILE_SIZE = 10.0f;
-const float SCALE = 25.0f;
-const float SHIP_SPEED = 300.0f;
-const float ROTATION_SPEED = 3.0f;
-
 int shootRate = 0;
 
 void DrawLines(Vector2 origin, Vector2 *points, int point_size, float scale, float rotation) {
@@ -79,7 +73,7 @@ void ShootShip() {
 }
 
 void CheckCollisionWithAsteroids(Projectile projectile) {
-    for (size_t j = 0; j < asteroidAmount; j++) {
+    for (size_t j = 0; j < ASTEROID_AMOUNT; j++) {
         if (!asteroids[j].isDead) {
             if (CheckCollisionCircles(projectile.position, PROJECTILE_SIZE, asteroids[j].position, asteroids[j].size / 2)) {
                 projectile.visible = false;

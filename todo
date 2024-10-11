@@ -12,7 +12,11 @@ Asteroid game:
     ✔ Basic shooting and projectile @started(24-10-09 17:16) @done(24-10-10 09:09) @lasted(15h53m51s)
     ✔ Projectile collision with asteroid @started(24-10-10 19:28) @done(24-10-10 21:23) @lasted(1h55m53s)
     ✔ Ship collision with asteroids @done(24-10-10 21:28)
-    ☐ Add ship explosion
+    ☐ Implement advanced collision system for detecting complex shapes @high
+    ☐ Add lives 
+    ☐ Add score
+    ☐ Add game reset when all lives are lost
+    ☐ Add ship explosion (basic particle system) @high
     ☐ Add asteroid explosion and split to smaller chunks
         ☐ Big - to 2 middle size
         ☐ Medium - to 2 small size
@@ -22,13 +26,15 @@ Asteroid game:
     ☐ Add score if asteroid is destroyed
         Store game stats in a struct as a global variable
     ☐ Minimap with additional screen
+    ☐ Camera zoom in and out
+    ☐ Camera smooth movement
 
     Bugs:
         ☐ Fix issue with projectile gap when shooting at long range @high
 
 
 Debugging tools:
-    ☐ Add debug menu
+    ☐ Add debug menu 
     ☐ Add console for showing printf's
     ☐ Show object positions on screen
     ☐ Add FPS counter to new debug menu

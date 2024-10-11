@@ -30,8 +30,8 @@ void GenerateAsteroid(Vector2 origin, Vector2 *points, int point_amount, float s
 }
 
 void InitAsteroid() {
-    asteroids = MemAlloc(asteroidAmount * sizeof(Asteroid));
-    for (size_t i = 0; i < asteroidAmount; i++) {
+    asteroids = MemAlloc(ASTEROID_AMOUNT * sizeof(Asteroid));
+    for (size_t i = 0; i < ASTEROID_AMOUNT; i++) {
         float rot = rand() % 360 / DEG2RAD;
         int point_amount = 5 + rand() % 16;
         Vector2 rand_pos = Vector2Init(rand() % GetScreenWidth(), rand() % GetScreenHeight());
@@ -54,7 +54,7 @@ void InitAsteroid() {
 }
 
 void UpdateAsteroid() {
-    for (size_t i = 0; i < asteroidAmount; i++) {
+    for (size_t i = 0; i < ASTEROID_AMOUNT; i++) {
         if (!asteroids[i].isDead) {
             Vector2 newPos = Vector2Add(asteroids[i].position, Vector2Scale(asteroids[i].velocity, GetFrameTime()));
             asteroids[i].position.x = fmodf(asteroids[i].position.x + GetScreenWidth(), GetScreenWidth());
@@ -79,7 +79,7 @@ void DrawAsteroid(Asteroid asteroid) {
 }
 
 void DrawAsteroids() {
-    for (size_t i = 0; i < asteroidAmount; i++) {
+    for (size_t i = 0; i < ASTEROID_AMOUNT; i++) {
         DrawAsteroid(asteroids[i]);
     }
 }
