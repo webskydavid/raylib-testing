@@ -13,9 +13,9 @@ Asteroid game:
     ✔ Projectile collision with asteroid @started(24-10-10 19:28) @done(24-10-10 21:23) @lasted(1h55m53s)
     ✔ Ship collision with asteroids @done(24-10-10 21:28)
     ☐ Implement advanced collision system for detecting complex shapes @high
-    ☐ Add lives 
+    ✔ Add lives @started(24-10-13 11:37) @done(24-10-13 15:25) @lasted(3h48m22s)
     ☐ Add score
-    ☐ Add game reset when all lives are lost
+    ✔ Add game reset when all lives are lost @started(24-10-13 10:14) @done(24-10-13 15:25) @lasted(5h11m25s)
     ☐ Add ship explosion (basic particle system) @high
     ☐ Add asteroid explosion and split to smaller chunks
         ☐ Big - to 2 middle size

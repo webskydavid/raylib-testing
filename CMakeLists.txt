@@ -49,6 +49,7 @@ add_executable(game
 	"${CMAKE_PROJECT_INCLUDE}/libs/asteroid.c"
 	"${CMAKE_PROJECT_INCLUDE}/libs/ship.c"
 	"${CMAKE_PROJECT_INCLUDE}/libs/debug.c"
+	"${CMAKE_PROJECT_INCLUDE}/libs/hud.c"
 )
 
 target_sources(${PROJECT_NAME} PRIVATE ${SRC_FILES})

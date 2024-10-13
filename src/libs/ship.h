@@ -10,6 +10,9 @@ typedef struct Ship {
     float rotation;
     float scale;
     bool isDead;
+    float deadTimer;
+    int lives;
+    int score;
 } Ship;
 
 typedef struct Projectile {
@@ -27,10 +30,17 @@ Vector2 Vector2Direction(Vector2 from, Vector2 to);
 Vector2 Vector2DirFromRotation(float rotation);
 
 void InitShip();
+void InitProjectiles();
+
 void ShootShip();
+
 void UpdateProjectiles();
 void UpdateShip();
-void DrawShip(Vector2 origin, float scale, float rotation);
+
+void DrawShip();
 void DrawProjectiles();
+
+void ResetShip();
+void ResetProjectiles();
 
 #endif

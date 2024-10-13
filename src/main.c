@@ -6,15 +6,26 @@
 #include "constants.h"
 #include "libs/asteroid.h"
 #include "libs/debug.h"
+#include "libs/hud.h"
 #include "libs/ship.h"
 
 #define ROTATION_SPEED 1.0f
 
-bool isDebug = true;
+bool isDebug = false;
 bool pause = false;
 
-Vector2 ast = Vector2Init(0.0f, 0.0f);
-Vector2 ast1 = Vector2Init(0.0f, 0.0f);
+void ResetGame() {
+    ResetAsteroids();
+    ResetProjectiles();
+    ResetShip();
+
+    ship.score = 0;
+    ship.lives = 3;
+}
+
+void ResetStage() {
+    ResetShip();
+}
 
 void Update() {
     if (IsKeyPressed(KEY_P)) {
@@ -32,6 +43,18 @@ void Update() {
     UpdateShip();
     UpdateAsteroid();
     UpdateProjectiles();
+
+    if (ship.isDead) {
+        ship.deadTimer -= GetFrameTime();
+
+        if (ship.deadTimer <= 0.0f) {
+            if (ship.lives <= 0) {
+                ResetGame();
+            } else {
+                ResetStage();
+            }
+        }
+    }
 }
 
 void Draw() {
@@ -39,9 +62,13 @@ void Draw() {
     ClearBackground(BLACK);
 
     DrawDebug();
-    DrawShip(ship.position, SCALE, ship.rotation);
+
+    DrawShip();
+
     DrawAsteroids();
     DrawProjectiles();
+
+    DrawHud();
 
     EndDrawing();
 }
@@ -52,7 +79,8 @@ int main() {
     InitWindow(700, 700, "raylib");
 
     InitShip();
-    InitAsteroid();
+    InitProjectiles();
+    InitAsteroids();
 
     while (!WindowShouldClose()) {
         Update();

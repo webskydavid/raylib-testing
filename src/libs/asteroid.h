@@ -19,9 +19,13 @@ extern bool isColliding;
 
 float RandRangeF(float min, float max);
 void GenerateAsteroid(Vector2 origin, Vector2 *points, int point_amount, float size, int seed);
-void InitAsteroid();
+
+void InitAsteroids();
+
 void UpdateAsteroid();
+
 void DrawAsteroid(Asteroid asteroid);
 void DrawAsteroids();
 
+void ResetAsteroids();
 #endif  // !ASTEROID_H

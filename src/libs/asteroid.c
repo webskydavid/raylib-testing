@@ -29,7 +29,7 @@ void GenerateAsteroid(Vector2 origin, Vector2 *points, int point_amount, float s
     }
 }
 
-void InitAsteroid() {
+void InitAsteroids() {
     asteroids = MemAlloc(ASTEROID_AMOUNT * sizeof(Asteroid));
     for (size_t i = 0; i < ASTEROID_AMOUNT; i++) {
         float rot = rand() % 360 / DEG2RAD;
@@ -61,8 +61,11 @@ void UpdateAsteroid() {
             asteroids[i].position.y = fmodf(asteroids[i].position.y + GetScreenHeight(), GetScreenHeight());
             asteroids[i].position = Vector2Add(asteroids[i].position, Vector2Scale(asteroids[i].velocity, GetFrameTime()));
 
-            if (CheckCollisionCircles(ship.position, SCALE / 2, asteroids[i].position, asteroids[i].size / 2)) {
+            // TODO: Should this check be here? Maybe it should be in the ship.c file
+            if (!ship.isDead && CheckCollisionCircles(ship.position, SCALE / 2, asteroids[i].position, asteroids[i].size / 2)) {
                 ship.isDead = true;
+                ship.lives--;
+                break;
             }
         }
     }
@@ -82,4 +85,9 @@ void DrawAsteroids() {
     for (size_t i = 0; i < ASTEROID_AMOUNT; i++) {
         DrawAsteroid(asteroids[i]);
     }
+}
+
+void ResetAsteroids() {
+    free(asteroids);
+    InitAsteroids();
 }

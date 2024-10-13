@@ -36,17 +36,8 @@ Vector2 Vector2DirFromRotation(float rotation) {
     return direction;
 }
 
-void InitShip() {
+void InitProjectiles() {
     projectiles = MemAlloc(PROJECTILE_AMOUNT * sizeof(Projectile));
-    ship = (Ship){
-        .position = Vector2Init(GetScreenWidth() / 2.0f, GetScreenHeight() / 2.0f),
-        .velocity = Vector2Init(0.0f, 0.0f),
-        .direction = Vector2Init(0.0f, 0.0f),
-        .rotation = 0.0f,
-        .scale = 1.0f,
-        .isDead = false,
-    };
-
     for (size_t i = 0; i < PROJECTILE_AMOUNT; i++) {
         projectiles[0] = (Projectile){
             .position = ship.position,
@@ -55,6 +46,20 @@ void InitShip() {
             .visible = false,
         };
     }
+}
+
+void InitShip() {
+    ship = (Ship){
+        .position = Vector2Init(GetScreenWidth() / 2.0f, GetScreenHeight() / 2.0f),
+        .velocity = Vector2Init(0.0f, 0.0f),
+        .direction = Vector2Init(0.0f, 0.0f),
+        .rotation = 0.0f,
+        .scale = 1.0f,
+        .isDead = false,
+        .lives = 3,
+        .score = 0,
+        .deadTimer = 3.0f,
+    };
 };
 
 void ShootShip() {
@@ -102,14 +107,6 @@ void UpdateProjectiles() {
     }
 }
 
-void DrawProjectiles() {
-    for (size_t i = 0; i < PROJECTILE_AMOUNT; i++) {
-        if (projectiles[i].visible) {
-            DrawCircleV(projectiles[i].position, PROJECTILE_SIZE, RED);
-        }
-    }
-}
-
 void UpdateShip() {
     if (ship.isDead) return;
 
@@ -144,10 +141,38 @@ void UpdateShip() {
     ship.position.y = fmodf(ship.position.y + GetScreenHeight(), GetScreenHeight());
 }
 
-void DrawShip(Vector2 origin, float scale, float rotation) {
+void DrawProjectiles() {
+    for (size_t i = 0; i < PROJECTILE_AMOUNT; i++) {
+        if (projectiles[i].visible) {
+            DrawCircleV(projectiles[i].position, PROJECTILE_SIZE, RED);
+        }
+    }
+}
+
+void DrawShip() {
     if (ship.isDead) return;
+    Vector2 origin = ship.position;
 
     const int point_amount = 5;
     Vector2 pts[point_amount] = {{-0.4, -0.5}, {0.0, 0.5}, {0.4, -0.5}, {0.3, -0.4}, {-0.3, -0.4}};
-    DrawLines(origin, pts, point_amount, scale, rotation);
+    DrawLines(origin, pts, point_amount, SCALE, ship.rotation);
+}
+
+void ResetShip() {
+    ship = (Ship){
+        .position = {GetScreenWidth() / 2, GetScreenHeight() / 2},
+        .velocity = {0.0f, 0.0f},
+        .direction = {0.0f, 0.0f},
+        .rotation = 0.0f,
+        .scale = 1.0f,
+        .isDead = false,
+        .lives = ship.lives,
+        .score = ship.score,
+        .deadTimer = 3.0f,
+    };
+}
+
+void ResetProjectiles() {
+    free(projectiles);
+    InitProjectiles();
 }

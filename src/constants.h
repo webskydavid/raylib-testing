@@ -8,7 +8,7 @@
 static const float TAU = PI / 2.0f;
 
 // Asteroids
-static const int ASTEROID_AMOUNT = 2;
+static const int ASTEROID_AMOUNT = 20;
 
 // Ship
 static const float SCALE = 25.0f;
