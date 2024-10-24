@@ -15,7 +15,9 @@
     "raymath.h": "c",
     "utils.h": "c",
     "stdlib.h": "c",
-    "stdio.h": "c"
+    "stdio.h": "c",
+    "variant": "c",
+    "*.m": "c"
   },
   "C_Cpp.default.compilerPath": "/usr/bin/clang"
 }

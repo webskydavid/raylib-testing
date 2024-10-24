@@ -78,14 +78,7 @@ void ShootShip() {
 }
 
 void CheckCollisionWithAsteroids(Projectile projectile) {
-    for (size_t j = 0; j < ASTEROID_AMOUNT; j++) {
-        if (!asteroids[j].isDead) {
-            if (CheckCollisionCircles(projectile.position, PROJECTILE_SIZE, asteroids[j].position, asteroids[j].size / 2)) {
-                projectile.visible = false;
-                asteroids[j].isDead = true;
-            }
-        }
-    }
+    AsteroidCollidedWithProjectile(projectile);
 }
 
 void UpdateProjectiles() {

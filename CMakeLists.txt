@@ -7,6 +7,8 @@ project(game
 	LANGUAGES C
 )
 
+add_compile_options(-fsanitize=address)
+add_link_options(-fsanitize=address)
 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 

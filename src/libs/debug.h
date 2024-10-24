@@ -7,4 +7,6 @@ extern bool isDebug;
 
 void DrawDebug();
 
+long display_memory_usage();
+
 #endif  // !DEBUG_H
